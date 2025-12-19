@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CV Moderne</title>
+    <style>
+        /* --- RÈGLES SPÉCIFIQUES IMPRESSION (WeasyPrint) --- */
+        @page {
+            size: A4;
+            margin: 0; /* Pas de marge blanche autour, on veut de la couleur jusqu'au bord */
+        }
+        
+        /* --- CONFIGURATION GÉNÉRALE --- */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif; /* Polices standard sûres */
+            margin: 0;
+            padding: 0;
+            width: 210mm;
+            height: 297mm;
+            display: flex; /* La magie qui sépare gauche/droite */
+        }
+
+        /* --- COLONNE GAUCHE (SIDEBAR) --- */
+        .sidebar {
+            width: 33%; /* 1/3 de la page */
+            background-color: #1e293b; /* Bleu Nuit Profond (Très Pro) */
+            color: #ffffff;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Photo de profil */
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Cercle parfait */
+            object-fit: cover;
+            border: 4px solid #3b82f6; /* Bordure bleue plus claire */
+            margin-bottom: 25px;
+            background-color: #ddd; /* Gris si pas de photo */
+        }
+
+        /* Titres dans la sidebar */
+        .sidebar-title {
+            text-transform: uppercase;
+            font-size: 16px;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .contact-item {
+            font-size: 13px;
+            margin-bottom: 10px;
+            text-align: center;
+            width: 100%;
+            word-wrap: break-word; /* Important pour les emails longs */
+        }
+
+        /* Compétences (Badges) */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .skill-badge {
+            background-color: #334155;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* --- COLONNE DROITE (MAIN) --- */
+        .main-content {
+            width: 67%; /* 2/3 de la page */
+            background-color: #ffffff;
+            padding: 40px;
+            color: #333;
+        }
+
+        .header-name {
+            font-size: 38px;
+            font-weight: 800;
+            color: #1e293b;
+            text-transform: uppercase;
+            line-height: 1;
+            margin: 0;
+        }
+
+        .header-job {
+            font-size: 20px;
+            color: #3b82f6; /* Le même bleu que la bordure photo */
+            font-weight: bold;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .summary {
+            font-size: 14px;
+            line-height: 1.4;
+            color: #64748b;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e293b;
+            border-left: 5px solid #3b82f6; /* Petite barre bleue à gauche */
+            padding-left: 10px;
+            margin-top: 25px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Liste des expériences */
+        .experience-block {
+            margin-bottom: 20px;
+            page-break-inside: avoid; /* Évite de couper une expérience en deux pages */
+        }
+
+        .exp-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .exp-role {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .exp-company {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .exp-date {
+            font-size: 12px;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .exp-desc {
+            font-size: 13px;
+            margin-top: 5px;
+            color: #475569;
+            line-height: 1.4;
+            white-space: pre-line; /* Respecte les sauts de ligne de l'utilisateur */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        {% if photo_url %}
+            <img src="{{ photo_url }}" class="profile-pic">
+        {% else %}
+            <div class="profile-pic"></div> 
+        {% endif %}
+
+        <div class="sidebar-title">Contact</div>
+        <div class="contact-item">{{ telephone }}</div>
+        <div class="contact-item">{{ email }}</div>
+        <div class="contact-item">{{ adresse }}</div>
+
+        <div class="sidebar-title">Compétences</div>
+        <div class="skills-container">
+            {% for skill in competences %}
+                <span class="skill-badge">{{ skill }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="sidebar-title">Langues</div>
+        {% for langue in langues %}
+            <div class="contact-item">{{ langue }}</div>
+        {% endfor %}
+    </div>
+
+    <div class="main-content">
+        <div class="header-name">{{ prenom }} {{ nom }}</div>
+        <div class="header-job">{{ titre_job }}</div>
+        
+        <p class="summary">
+            {{ profil_resume }}
+        </p>
+
+        <div class="section-title">Expériences Professionnelles</div>
+        
+        {% for exp in experiences %}
+        <div class="experience-block">
+            <div class="exp-head">
+                <span class="exp-role">{{ exp.poste }}</span>
+                <span class="exp-date">{{ exp.debut }} - {{ exp.fin }}</span>
+            </div>
+            <div class="exp-company">{{ exp.entreprise }}</div>
+            <div class="exp-desc">{{ exp.description }}</div>
+        </div>
+        {% endfor %}
+
+        <div class="section-title">Formation</div>
+        {% for edu in formations %}
+        <div class="experience-block">
+            <div class="exp-head">
+                <span class="exp-role">{{ edu.diplome }}</span>
+                <span class="exp-date">{{ edu.annee }}</span>
+            </div>
+            <div class="exp-company">{{ edu.ecole }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
