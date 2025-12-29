@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CV {{ identite.prenom }} {{ identite.nom }}</title>
+    <style>
+        /* --- CONFIGURATION GÉNÉRALE MODERNE --- */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            width: 210mm;
+            height: 297mm;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 25mm 20mm;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- ÉLÉMENTS DÉCORATIFS MODERNES --- */
+        .decorative-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .decor-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -80px;
+            left: -80px;
+        }
+        
+        .accent-line {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%);
+            opacity: 0.7;
+        }
+
+        /* --- CONTENEUR PRINCIPAL --- */
+        .main-container {
+            max-width: 170mm;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 40px 35px;
+            position: relative;
+        }
+
+        /* --- EN-TÊTE MODERNE --- */
+        .modern-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .photo-container-modern {
+            width: 120px;
+            height: 160px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-right: 30px;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        .photo-modern {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .header-text {
+            flex: 1;
+        }
+        
+        .name-modern {
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+        
+        .title-modern {
+            font-size: 18px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .contact-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .contact-badge {
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- ACCROCHE MODERNE --- */
+        .accroche-modern {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border-left: 5px solid #3b82f6;
+        }
+        
+        .accroche-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #334155;
+            font-style: italic;
+        }
+
+        /* --- LAYOUT EN GRID MODERNE --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        /* --- CARTES MODERNES --- */
+        .card-modern {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 2px;
+        }
+
+        /* --- ITEMS DE LISTE MODERNES --- */
+        .timeline-item {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 22px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 18px;
+            bottom: -22px;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .item-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1e293b;
+        }
+        
+        .item-date {
+            font-size: 12px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .item-subtitle {
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .item-details {
+            font-size: 12px;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        /* --- COMPÉTENCES AVEC BARRES DE PROGRESSION --- */
+        .skill-item-modern {
+            margin-bottom: 18px;
+        }
+        
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .skill-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .skill-percent {
+            font-size: 12px;
+            color: #64748b;
+        }
+        
+        .skill-bar-container {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .skill-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        /* --- TAGS MODERNES --- */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag-modern {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* --- LANGUES MODERNES --- */
+        .language-item-modern {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        
+        .language-item-modern:last-child {
+            border-bottom: none;
+        }
+        
+        .language-name-modern {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+        
+        .level-dots {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e2e8f0;
+        }
+        
+        .dot.filled {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+
+        /* --- SIGNATURE MODERNE --- */
+        .signature-modern {
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 2px dashed #e2e8f0;
+            text-align: center;
+        }
+        
+        .signature-text {
+            font-size: 12px;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .signature-highlight {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* --- UTILITAIRES --- */
+        .page-break {
+            page-break-before: always;
+        }
+        
+        .mt-3 { margin-top: 15px; }
+        .mb-3 { margin-bottom: 15px; }
+        .text-center { text-align: center; }
+        .text-muted { color: #64748b; }
+        .font-bold { font-weight: 700; }
+
+    </style>
+</head>
+<body>
+    <!-- Éléments décoratifs modernes -->
+    <div class="decorative-elements">
+        <div class="decor-circle circle-1"></div>
+        <div class="decor-circle circle-2"></div>
+        <div class="accent-line"></div>
+    </div>
+
+    <!-- Conteneur principal -->
+    <div class="main-container">
+        <!-- En-tête moderne -->
+        <div class="modern-header">
+            <div class="photo-container-modern">
+                {% if identite.photo_base64 and identite.photo_base64 != "" %}
+                    <img src="data:image/jpeg;base64,{{ identite.photo_base64 }}" class="photo-modern">
+                {% else %}
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#e2e8f0 0%,#cbd5e1 100%);"></div>
+                {% endif %}
+            </div>
+            
+            <div class="header-text">
+                <h1 class="name-modern">{{ identite.prenom }} {{ identite.nom }}</h1>
+                {% if identite.post_nom and identite.post_nom != "" %}
+                    <div class="text-muted mb-3">{{ identite.post_nom }}</div>
+                {% endif %}
+                
+                {% if accroche and accroche != "" %}
+                    <div class="title-modern">{{ accroche|truncate(80) }}</div>
+                {% endif %}
+                
+                <div class="contact-badges">
+                    {% if identite.contact.telephone_primaire %}
+                        <div class="contact-badge">📱 {{ identite.contact.telephone_primaire }}</div>
+                    {% endif %}
+                    {% if identite.contact.email %}
+                        <div class="contact-badge">✉️ {{ identite.contact.email }}</div>
+                    {% endif %}
+                    {% if identite.contact.linkedin %}
+                        <div class="contact-badge">💼 {{ identite.contact.linkedin }}</div>
+                    {% endif %}
+                    {% if identite.provenance.nationalite %}
+                        <div class="contact-badge">🌍 {{ identite.provenance.nationalite }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Accroche professionnelle -->
+        {% if accroche and accroche != "" %}
+        <div class="accroche-modern">
+            <p class="accroche-text">"{{ accroche }}"</p>
+        </div>
+        {% endif %}
+
+        <!-- Layout en grille moderne -->
+        <div class="grid-layout">
+            <!-- COLONNE GAUCHE -->
+            <div>
+                <!-- Expériences professionnelles -->
+                {% if experiences_pro and experiences_pro|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Expériences Professionnelles</div>
+                    {% for exp in experiences_pro %}
+                    <div class="timeline-item">
+                        <div class="item-header">
+                            <div class="item-title">{{ exp.poste }}</div>
+                            <div class="item-date">{{ exp.periode }}</div>
+                        </div>
+                        <div class="item-subtitle">{{ exp.entreprise }}</div>
+                        {% if exp.ville and exp.ville != "" %}
+                            <div class="item-details mb-3">{{ exp.ville }}</div>
+                        {% endif %}
+                        {% if exp.missions and exp.missions|length > 0 %}
+                            <div style="font-size:11.5px;color:#475569;line-height:1.5;">
+                                {% for mission in exp.missions %}
+                                • {{ mission }}<br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Formations -->
+                {% if etudes and etudes|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Formation Académique</div>
+                    {% for etude in etudes %}
+                    <div class="timeline-item">
+                        <div class="item-header">
+                            <div class="item-title">{{ etude.diplome }}</div>
+                            <div class="item-date">{{ etude.annee }}</div>
+                        </div>
+                        <div class="item-subtitle">{{ etude.institution }}</div>
+                        <div class="item-details">{{ etude.ville }}</div>
+                        {% if etude.mention and etude.mention != "" %}
+                            <div style="font-size:11px;color:#10b981;font-weight:500;">Mention: {{ etude.mention }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- COLONNE DROITE -->
+            <div>
+                <!-- Compétences techniques -->
+                {% if competences.techniques and competences.techniques|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Compétences Techniques</div>
+                    <div class="tags-container">
+                        {% for skill in competences.techniques %}
+                            <div class="tag-modern">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Compétences informatiques -->
+                {% if competences.informatiques and competences.informatiques|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Compétences Informatiques</div>
+                    <div class="tags-container">
+                        {% for skill in competences.informatiques %}
+                            <div class="tag-modern">{{ skill }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Langues -->
+                {% if competences.langues and competences.langues|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Langues</div>
+                    {% for langue in competences.langues %}
+                    <div class="language-item-modern">
+                        <span class="language-name-modern">{{ langue.langue }}</span>
+                        <div class="level-dots">
+                            {% set level_map = {"Débutant":1, "Intermédiaire":3, "Avancé":4, "Courant":5, "Bilingue":5, "Maternelle":5} %}
+                            {% set level = level_map.get(langue.niveau, 3) %}
+                            {% for i in range(5) %}
+                                <div class="dot {% if i < level %}filled{% endif %}"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Informations personnelles -->
+                <div class="card-modern mb-3">
+                    <div class="card-title">Informations Personnelles</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        {% if identite.sexe %}
+                        <div>
+                            <div style="font-size:11px;color:#64748b;">Genre</div>
+                            <div style="font-size:13px;color:#334155;font-weight:500;">
+                                {% if identite.sexe == "M" %}Masculin{% else %}Féminin{% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if identite.date_naissance %}
+                        <div>
+                            <div style="font-size:11px;color:#64748b;">Naissance</div>
+                            <div style="font-size:13px;color:#334155;font-weight:500;">{{ identite.date_naissance }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if identite.etat_civil %}
+                        <div>
+                            <div style="font-size:11px;color:#64748b;">État civil</div>
+                            <div style="font-size:13px;color:#334155;font-weight:500;">{{ identite.etat_civil }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if identite.provenance.nationalite %}
+                        <div>
+                            <div style="font-size:11px;color:#64748b;">Nationalité</div>
+                            <div style="font-size:13px;color:#334155;font-weight:500;">{{ identite.provenance.nationalite }}</div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if identite.provenance.province_origine %}
+                        <div>
+                            <div style="font-size:11px;color:#64748b;">Origine</div>
+                            <div style="font-size:13px;color:#334155;font-weight:500;">{{ identite.provenance.province_origine }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Centres d'intérêt -->
+                {% if centres_interet and centres_interet|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Centres d'Intérêt</div>
+                    <div class="tags-container">
+                        {% for interet in centres_interet %}
+                            <div class="tag-modern">{{ interet }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Qualités humaines -->
+                {% if qualites_humaines and qualites_humaines|length > 0 %}
+                <div class="card-modern mb-3">
+                    <div class="card-title">Qualités Humaines</div>
+                    <div class="tags-container">
+                        {% for qualite in qualites_humaines %}
+                            <div class="tag-modern">{{ qualite }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Signature -->
+        {% if signature.lieu or signature.date %}
+        <div class="signature-modern">
+            <div class="signature-text">
+                {% if signature.lieu and signature.lieu != "" %}
+                    Fait à <span class="signature-highlight">{{ signature.lieu }}</span>
+                {% endif %}
+                {% if signature.date and signature.date != "" %}
+                    le <span class="signature-highlight">{{ signature.date }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

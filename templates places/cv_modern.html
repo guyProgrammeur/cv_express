@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>CV {{ identite.prenom }} {{ identite.nom }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    @page { size: A4; margin: 15mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; }
+
+    :root {
+        --accent: #2d3436;    /* Anthracite moderne */
+        --highlight: #0984e3; /* Bleu électrique discret */
+        --bg-light: #f9f9f9;
+        --border-color: #dfe6e9;
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--accent);
+        line-height: 1.6;
+        font-size: 10pt;
+        background: white;
+    }
+
+    /* ===================== HEADER CENTRAL ===================== */
+    header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .photo-frame {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+        border-radius: 20px; /* Carré arrondi moderne */
+        overflow: hidden;
+        border: 2px solid var(--highlight);
+    }
+    .photo-img { width: 100%; height: 100%; object-fit: cover; }
+
+    .name {
+        font-size: 26pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        color: var(--accent);
+    }
+    .job-title {
+        font-size: 14pt;
+        color: var(--highlight);
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-top: 5px;
+    }
+
+    /* ===================== CONTACT BAR ===================== */
+    .contact-bar {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 15px;
+        font-size: 9pt;
+        color: #636e72;
+    }
+
+    /* ===================== LAYOUT ===================== */
+    .section {
+        display: grid;
+        grid-template-columns: 180px 1fr; /* Colonne titre à gauche / contenu à droite */
+        margin-bottom: 35px;
+        page-break-inside: avoid;
+    }
+
+    .section-label {
+        font-weight: 700;
+        font-size: 10pt;
+        text-transform: uppercase;
+        color: var(--highlight);
+        padding-top: 5px;
+    }
+
+    .section-content {
+        border-left: 1px solid var(--border-color);
+        padding-left: 25px;
+    }
+
+    /* ===================== BLOCS CONTENU ===================== */
+    .item { margin-bottom: 20px; }
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .item-title { font-size: 12pt; font-weight: 700; color: #000; }
+    .item-date { font-weight: 600; font-size: 9pt; color: var(--highlight); }
+    .item-sub { font-weight: 600; color: #636e72; margin-bottom: 8px; }
+
+    /* Compétences Modernes (Style Pill) */
+    .pill-container { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+        background: var(--bg-light);
+        padding: 5px 12px;
+        border-radius: 5px;
+        font-size: 9pt;
+        font-weight: 600;
+        border: 1px solid var(--border-color);
+    }
+
+    .summary { font-style: italic; color: #636e72; }
+    
+    ul { list-style-type: square; padding-left: 15px; color: #636e72; }
+    li { margin-bottom: 3px; }
+
+    .footer-sign {
+        margin-top: 50px;
+        text-align: right;
+        font-size: 9pt;
+    }
+  </style>
+</head>
+<body>
+
+    <header>
+        <div class="photo-frame">
+            {% if identite.photo_base64 %}
+              <img src="data:image/jpeg;base64,{{ identite.photo_base64 }}" class="photo-img" />
+            {% endif %}
+        </div>
+        <div class="name">{{ identite.prenom }} {{ identite.nom }}</div>
+        <div class="job-title">{{ identite.titre_profil | default('Curriculum Vitae') }}</div>
+        
+        <div class="contact-bar">
+            <span>{{ identite.contact.telephone_primaire }}</span>
+            <span>•</span>
+            <span>{{ identite.contact.email }}</span>
+            <span>•</span>
+            <span>{{ identite.contact.adresse_actuelle }}</span>
+        </div>
+    </header>
+
+    {% if accroche %}
+    <div class="section">
+        <div class="section-label">Profil</div>
+        <div class="section-content summary">{{ accroche }}</div>
+    </div>
+    {% endif %}
+
+    {% if experiences_pro %}
+    <div class="section">
+        <div class="section-label">Expériences</div>
+        <div class="section-content">
+            {% for exp in experiences_pro %}
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-title">{{ exp.poste }}</div>
+                    <div class="item-date">{{ exp.periode }}</div>
+                </div>
+                <div class="item-sub">{{ exp.entreprise }} | {{ exp.ville }}</div>
+                <div class="item-desc">
+                    <ul>
+                        {% for m in exp.missions %}<li>{{ m }}</li>{% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if etudes %}
+    <div class="section">
+        <div class="section-label">Études</div>
+        <div class="section-content">
+            {% for etude in etudes %}
+            <div class="item" style="margin-bottom: 10px;">
+                <div class="item-header">
+                    <div class="item-title">{{ etude.diplome }}</div>
+                    <div class="item-date">{{ etude.annee }}</div>
+                </div>
+                <div class="item-sub">{{ etude.institution }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if competences.techniques %}
+    <div class="section">
+        <div class="section-label">Expertise</div>
+        <div class="section-content">
+            <div class="pill-container">
+                {% for skill in competences.techniques %}
+                <span class="pill">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if personnes_reference %}
+    <div class="section">
+        <div class="section-label">Références</div>
+        <div class="section-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            {% for ref in personnes_reference %}
+            <div class="ref">
+                <div style="font-weight: 700;">{{ ref.nom }}</div>
+                <div style="font-size: 8pt; color: var(--highlight);">{{ ref.fonction }}</div>
+                <div style="font-size: 8pt;">{{ ref.telephone }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="footer-sign">
+        <p>Certifié sincère,</p>
+        <p style="font-weight: 700;">{{ signature.lieu }} {{ signature.date }}</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --gold: #c5a059;
+        --deep-red: #8b0000;
+        --soft-white: #fcfafa;
+        --dark-charcoal: #1a1a1a;
+        --light-gray: #f2f2f2;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: white;
+        color: var(--dark-charcoal);
+        margin: 0;
+        padding: 0;
+      }
+
+      /* --- HEADER DESIGN --- */
+      .top-bar {
+        height: 15px;
+        background: linear-gradient(
+          90deg,
+          var(--deep-red) 0%,
+          var(--gold) 100%
+        );
+      }
+
+      .header-container {
+        padding: 50px 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .identity-block {
+        border-left: 5px solid var(--gold);
+        padding-left: 25px;
+      }
+
+      .name-main {
+        font-size: 38pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 0.9;
+        letter-spacing: -1px;
+      }
+
+      .name-main span {
+        color: var(--deep-red);
+        display: block;
+      }
+
+      .title-sub {
+        font-family: "Playfair Display", serif;
+        font-size: 16pt;
+        font-style: italic;
+        color: var(--gold);
+        margin-top: 10px;
+      }
+
+      /* --- LAYOUT --- */
+      .content-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        padding: 0 60px 40px 60px;
+      }
+
+      /* --- SIDEBAR --- */
+      .sidebar {
+        background: var(--light-gray);
+        padding: 30px;
+        border-radius: 5px;
+        height: fit-content;
+      }
+
+      .sidebar-section {
+        margin-bottom: 30px;
+      }
+
+      .sidebar-h3 {
+        font-size: 11pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--dark-charcoal);
+        border-bottom: 2px solid var(--gold);
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        display: inline-block;
+      }
+
+      .contact-item {
+        margin-bottom: 12px;
+        font-size: 9pt;
+      }
+
+      .contact-item strong {
+        color: var(--deep-red);
+        display: block;
+      }
+
+      /* --- MAIN CONTENT --- */
+      .main-section {
+        margin-bottom: 40px;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .section-header h2 {
+        font-size: 18pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0;
+        white-space: nowrap;
+      }
+
+      .section-header .line {
+        height: 2px;
+        background: var(--gold);
+        width: 100%;
+        margin-left: 20px;
+      }
+
+      /* Expérience Style */
+      .exp-item {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 30px;
+        border-left: 1px solid var(--light-gray);
+      }
+
+      .exp-item::before {
+        content: "";
+        position: absolute;
+        left: -5px;
+        top: 5px;
+        width: 9px;
+        height: 9px;
+        background: var(--deep-red);
+        border-radius: 50%;
+      }
+
+      .exp-date {
+        font-weight: 700;
+        color: var(--gold);
+        font-size: 10pt;
+        margin-bottom: 5px;
+      }
+
+      .exp-company {
+        font-weight: 300;
+        font-size: 11pt;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+
+      .exp-role {
+        font-weight: 700;
+        font-size: 13pt;
+        color: var(--dark-charcoal);
+        margin-bottom: 10px;
+      }
+
+      .exp-desc {
+        font-size: 9.5pt;
+        color: #555;
+        line-height: 1.6;
+      }
+
+      /* Skills Badges */
+      .skill-pill {
+        display: inline-block;
+        background: var(--dark-charcoal);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 8pt;
+        margin: 0 5px 8px 0;
+        font-weight: 400;
+      }
+
+      .skill-pill.gold {
+        background: var(--gold);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar"></div>
+
+    <header class="header-container">
+      <div class="identity-block">
+        <h1 class="name-main">
+          {{ identite.prenom }} <span>{{ identite.nom }}</span>
+        </h1>
+        <div class="title-sub">Expert en Solutions Stratégiques</div>
+      </div>
+
+      {% if identite.photo_base64 %}
+      <img
+        src="data:image/jpeg;base64,{{ identite.photo_base64 }}"
+        style="
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          border: 4px solid var(--gold);
+          object-fit: cover;
+        "
+      />
+      {% endif %}
+    </header>
+
+    <div class="content-wrapper">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-h3">Coordonnées</h3>
+          <div class="contact-item">
+            <strong>Email</strong> {{ identite.contact.email }}
+          </div>
+          <div class="contact-item">
+            <strong>Mobile</strong> {{ identite.contact.telephone_primaire }}
+          </div>
+          <div class="contact-item">
+            <strong>Localisation</strong> {{ identite.contact.adresse_actuelle
+            }}
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-h3">Expertises</h3>
+          <div>
+            {% for skill in competences.techniques %}
+            <span class="skill-pill {% if loop.index is even %}gold{% endif %}"
+              >{{ skill }}</span
+            >
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3 class="sidebar-h3">Langues</h3>
+          {% for langue in competences.langues %}
+          <div
+            class="contact-item"
+            style="display: flex; justify-content: space-between"
+          >
+            <span>{{ langue.langue }}</span>
+            <span style="color: var(--gold); font-weight: 700"
+              >{{ langue.niveau }}</span
+            >
+          </div>
+          {% endfor %}
+        </div>
+      </aside>
+
+      <main>
+        <section class="main-section">
+          <div class="section-header">
+            <h2>Profil</h2>
+            <div class="line"></div>
+          </div>
+          <p
+            style="
+              font-size: 10pt;
+              line-height: 1.7;
+              color: #444;
+              margin-top: -10px;
+            "
+          >
+            {{ accroche }}
+          </p>
+        </section>
+
+        <section class="main-section">
+          <div class="section-header">
+            <h2>Parcours</h2>
+            <div class="line"></div>
+          </div>
+
+          {% for exp in experiences_pro %}
+          <div class="exp-item">
+            <div class="exp-date">{{ exp.periode }}</div>
+            <div class="exp-role">{{ exp.poste }}</div>
+            <div class="exp-company">
+              {{ exp.entreprise }} | {{ exp.ville }}
+            </div>
+            <div class="exp-desc">
+              <ul>
+                {% for mission in exp.missions %}
+                <li>{{ mission }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          {% endfor %}
+        </section>
+
+        <section class="main-section">
+          <div class="section-header">
+            <h2>Éducation</h2>
+            <div class="line"></div>
+          </div>
+          {% for etude in etudes %}
+          <div style="margin-bottom: 15px">
+            <span style="font-weight: 700; color: var(--deep-red)"
+              >{{ etude.annee }}</span
+            >
+            — <span style="font-weight: 700">{{ etude.diplome }}</span><br />
+            <small style="color: var(--gold); font-weight: 600"
+              >{{ etude.institution }}</small
+            >
+          </div>
+          {% endfor %}
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

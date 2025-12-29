@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>CV {{ identite.prenom }} {{ identite.nom }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ===================== CONFIGURATION PAGE ===================== */
+    @page {
+        size: A4;
+        margin: 0; /* Important pour que la sidebar touche les bords */
+    }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* ===================== PALETTE COULEURS PRO ===================== */
+    :root {
+        --primary: #1a3c5e;     /* Bleu Marine Profond (Texte fort, titres) */
+        --primary-light: #e6eef5; /* Bleu très clair (Fond compétences) */
+        --secondary: #d4af37;   /* Or (Accents, Lignes) */
+        --text-dark: #2c3e50;   /* Gris foncé (Texte standard) */
+        --text-muted: #636e72;  /* Gris moyen (Détails) */
+        --sidebar-bg: #f4f6f7;  /* Gris pâle (Fond sidebar) */
+        --white: #ffffff;
+    }
+
+    html, body {
+        height: 100%; /* Nécessaire pour la hauteur 100% */
+        font-family: "Roboto", sans-serif;
+        font-size: 10pt;
+        line-height: 1.5;
+        color: var(--text-dark);
+        background: var(--white);
+    }
+
+    /* ===================== LAYOUT (TABLE DISPLAY) ===================== */
+    /* Cette technique assure que la colonne de gauche va jusqu'en bas */
+    .container {
+        display: table;
+        width: 100%;
+        height: 100%; 
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    /* COLONNE GAUCHE */
+    .sidebar {
+        display: table-cell;
+        vertical-align: top;
+        width: 30%; /* Largeur fixe de 30% */
+        height: 100%; /* Force la hauteur */
+        background-color: var(--sidebar-bg);
+        border-right: 2px solid var(--secondary); /* La ligne dorée continue jusqu'en bas */
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    /* COLONNE DROITE */
+    .main {
+        display: table-cell;
+        vertical-align: top;
+        width: 70%;
+        padding: 40px 35px;
+        background-color: var(--white);
+    }
+
+    /* ===================== PHOTO ===================== */
+    .photo-frame {
+        width: 140px;
+        height: 140px;
+        margin: 0 auto 25px auto;
+        border-radius: 50%;
+        border: 4px solid var(--primary);
+        padding: 3px;
+        background: var(--white);
+        overflow: hidden;
+    }
+    .photo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+    }
+    .photo-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e0e0e0;
+        color: var(--primary);
+        font-size: 36px;
+        font-weight: 700;
+        border-radius: 50%;
+    }
+
+    /* ===================== TITRES & TEXTES ===================== */
+    /* Sidebar Headers */
+    .sidebar-title {
+        font-size: 11pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--primary);
+        border-bottom: 2px solid var(--secondary);
+        margin: 30px 0 15px 0;
+        padding-bottom: 5px;
+        text-align: left;
+    }
+
+    /* Main Headers */
+    .header .name {
+        font-size: 28pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        color: var(--primary);
+        line-height: 1.1;
+        margin-bottom: 5px;
+    }
+    .header .name strong { font-weight: 800; }
+    
+    .header .job-title {
+        font-size: 14pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--secondary);
+        margin-bottom: 15px;
+        letter-spacing: 1px;
+    }
+
+    .section-title {
+        font-size: 15pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin: 35px 0 20px 0;
+        display: flex;
+        align-items: center;
+    }
+    .section-title::after {
+        content: "";
+        flex: 1;
+        height: 2px;
+        background: var(--secondary);
+        margin-left: 15px;
+        opacity: 0.6;
+    }
+
+    /* ===================== COMPOSANTS SIDEBAR ===================== */
+    /* Contact */
+    .contact-block {
+        margin-bottom: 12px;
+        font-size: 9.5pt;
+        text-align: left;
+        display: flex;
+        align-items: flex-start;
+    }
+    .contact-icon {
+        min-width: 20px;
+        color: var(--primary);
+        margin-right: 8px;
+        font-size: 10pt;
+    }
+    .contact-value { word-break: break-word; color: var(--text-dark); }
+
+    /* Compétences (CORRIGÉ: Une seule "couche") */
+    .skill-badge {
+        display: inline-block;
+        background-color: var(--primary-light); /* Fond bleu très pâle */
+        color: var(--primary); /* Texte bleu marine */
+        /* PAS DE BORDURE */
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px; /* Coins légèrement arrondis */
+        font-size: 9pt;
+        font-weight: 600;
+        margin: 0 4px 6px 0;
+    }
+    .skills-container { text-align: left; }
+
+    /* Langues */
+    .lang-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 9.5pt;
+        border-bottom: 1px dashed #ccc;
+        padding-bottom: 2px;
+    }
+    .lang-label { font-weight: 600; }
+    .lang-level { color: var(--secondary); font-weight: 500; }
+
+    /* ===================== COMPOSANTS MAIN ===================== */
+    .summary {
+        font-style: italic;
+        color: var(--text-muted);
+        margin-bottom: 30px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-left: 4px solid var(--secondary);
+        text-align: justify;
+    }
+
+    .item-block {
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .item-title {
+        font-size: 12pt;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+    .item-date {
+        font-size: 9pt;
+        font-weight: 600;
+        color: var(--white);
+        background: var(--primary);
+        padding: 2px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+    .item-subtitle {
+        font-size: 11pt;
+        font-weight: 500;
+        color: var(--primary);
+        margin-bottom: 5px;
+    }
+    .item-location { font-style: italic; font-size: 0.9em; color: var(--text-muted); }
+    
+    .item-details {
+        font-size: 9.5pt;
+        color: var(--text-muted);
+        text-align: justify;
+    }
+    .item-details ul { padding-left: 18px; margin-top: 5px; }
+    .item-details li { margin-bottom: 3px; }
+
+    /* Références */
+    .ref-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    .ref-item {
+        background: #fcfcfc;
+        border-left: 2px solid var(--secondary);
+        padding: 10px;
+    }
+
+    /* Signature */
+    .signature {
+        margin-top: 50px;
+        text-align: right;
+        font-size: 10pt;
+        color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="sidebar">
+      <div class="photo-frame">
+        {% if identite.photo_base64 %}
+          <img src="data:image/jpeg;base64,{{ identite.photo_base64 }}" class="photo-img" alt="Photo" />
+        {% else %}
+          <div class="photo-placeholder">{{ identite.prenom[0] }}{{ identite.nom[0] }}</div>
+        {% endif %}
+      </div>
+
+      <div class="sidebar-title">Contact</div>
+      
+      {% if identite.contact.telephone_primaire %}
+        <div class="contact-block">
+            <span class="contact-icon">📞</span>
+            <span class="contact-value">{{ identite.contact.telephone_primaire }}</span>
+        </div>
+      {% endif %}
+      {% if identite.contact.email %}
+        <div class="contact-block">
+            <span class="contact-icon">✉️</span>
+            <span class="contact-value">{{ identite.contact.email }}</span>
+        </div>
+      {% endif %}
+      {% if identite.contact.adresse_actuelle %}
+        <div class="contact-block">
+            <span class="contact-icon">📍</span>
+            <span class="contact-value">{{ identite.contact.adresse_actuelle }}</span>
+        </div>
+      {% endif %}
+      {% if identite.contact.linkedin %}
+        <div class="contact-block">
+            <span class="contact-icon">🔗</span>
+            <span class="contact-value">{{ identite.contact.linkedin }}</span>
+        </div>
+      {% endif %}
+
+      <div class="sidebar-title">Infos</div>
+      <div class="lang-row"><span class="lang-label">Nationalité</span><span class="contact-value">{{ identite.provenance.nationalite }}</span></div>
+      <div class="lang-row" style="border:none"><span class="lang-label">État Civil</span><span class="contact-value">{{ identite.etat_civil }}</span></div>
+
+      {% if competences.techniques %}
+        <div class="sidebar-title">Compétences</div>
+        <div class="skills-container">
+          {% for skill in competences.techniques %}
+            <span class="skill-badge">{{ skill }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if competences.langues %}
+        <div class="sidebar-title">Langues</div>
+        {% for langue in competences.langues %}
+          <div class="lang-row">
+            <span class="lang-label">{{ langue.langue }}</span>
+            <span class="lang-level">{{ langue.niveau }}</span>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if centres_interet %}
+        <div class="sidebar-title">Intérêts</div>
+        <div style="text-align: left; font-size: 9.5pt; color: var(--text-dark);">
+          {% for interet in centres_interet %}
+             • {{ interet }}<br>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="main">
+      <div class="header">
+        <div class="name">
+          {{ identite.prenom }} <strong>{{ identite.nom }}</strong>
+        </div>
+        {% if identite.titre_profil %}
+            <div class="job-title">{{ identite.titre_profil }}</div>
+        {% endif %}
+        
+        {% if accroche %}
+          <div class="summary">{{ accroche }}</div>
+        {% endif %}
+      </div>
+
+      {% if experiences_pro %}
+        <div class="section-title">Expériences Professionnelles</div>
+        {% for exp in experiences_pro %}
+          <div class="item-block">
+            <div class="item-header">
+              <span class="item-title">{{ exp.poste }}</span>
+              <span class="item-date">{{ exp.periode }}</span>
+            </div>
+            <div class="item-subtitle">
+              {{ exp.entreprise }} {% if exp.ville %}<span class="item-location"> - {{ exp.ville }}</span>{% endif %}
+            </div>
+            {% if exp.missions %}
+              <div class="item-details">
+                <ul>
+                  {% for mission in exp.missions %}
+                    <li>{{ mission }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if etudes %}
+        <div class="section-title">Formation</div>
+        {% for etude in etudes %}
+          <div class="item-block">
+            <div class="item-header">
+              <span class="item-title">{{ etude.diplome }}</span>
+              <span class="item-date">{{ etude.annee }}</span>
+            </div>
+            <div class="item-subtitle">
+                {{ etude.institution }} {% if etude.ville %}<span class="item-location">- {{ etude.ville }}</span>{% endif %}
+            </div>
+            {% if etude.mention %}
+              <div class="item-details" style="color: var(--secondary); font-style: italic;">
+                Mention : {{ etude.mention }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if formations_certifications %}
+        <div class="section-title">Certifications</div>
+        {% for cert in formations_certifications %}
+          <div class="item-block" style="margin-bottom: 10px;">
+            <div class="item-header">
+              <span class="item-title" style="font-size: 11pt">{{ cert.titre }}</span>
+              <span class="item-date">{{ cert.annee }}</span>
+            </div>
+            <div class="item-location">{{ cert.organisme }}</div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% if personnes_reference %}
+        <div class="section-title">Références</div>
+        <div class="ref-grid">
+          {% for ref in personnes_reference %}
+            <div class="ref-item">
+              <div style="font-weight: 700; color: var(--primary);">{{ ref.nom }}</div>
+              <div style="font-size: 9pt; font-style: italic;">{{ ref.fonction }}</div>
+              {% if ref.email %}<div style="font-size: 8.5pt;">✉️ {{ ref.email }}</div>{% endif %}
+              {% if ref.telephone %}<div style="font-size: 8.5pt;">📞 {{ ref.telephone }}</div>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if signature.date or signature.lieu %}
+        <div class="signature">
+          <p>
+            {% if signature.lieu %}Fait à <strong>{{ signature.lieu }}</strong>,{% endif %}
+            {% if signature.date %}le {{ signature.date }}{% endif %}
+          </p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

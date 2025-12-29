@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CV Professionnel - {{ identite.prenom }} {{ identite.nom }}</title>
+    <style>
+        /* ===================== VARIABLES GLOBALES ===================== */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #7f8c8d;
+            --dark: #34495e;
+            --light: #ecf0f1;
+            --muted: #95a5a6;
+            --bg-sidebar: #f8f9fa;
+            --border: #dfe6e9;
+            --accent: #3498db;
+            --success: #27ae60;
+            --white: #ffffff;
+        }
+
+        /* ===================== CONFIGURATION GÉNÉRALE ===================== */
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            display: flex;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: var(--white);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===================== SIDEBAR (COLONNE GAUCHE) ===================== */
+        .sidebar {
+            width: 35%;
+            background-color: var(--bg-sidebar);
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            max-height: 297mm;
+            height: 100%;
+        }
+
+        /* --- Photo de profil --- */
+        .profile-pic-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .profile-pic {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: var(--light);
+        }
+
+        /* --- Nom et prénom --- */
+        .sidebar-name {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        .sidebar-postnom {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        /* --- Titres dans la sidebar --- */
+        .sidebar-title {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            padding-bottom: 8px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Contact --- */
+        .contact-item {
+            font-size: 9.5pt;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            page-break-inside: avoid;
+        }
+        .contact-label {
+            font-weight: 600;
+            color: var(--dark);
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+        .contact-value {
+            flex: 1;
+            color: var(--secondary);
+            word-break: break-word;
+        }
+
+        /* --- Informations personnelles --- */
+        .personal-info {
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            background-color: var(--white);
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9.5pt;
+            margin-bottom: 4px;
+            page-break-inside: avoid;
+        }
+        .info-label { color: var(--muted); }
+        .info-value { color: var(--dark); font-weight: 500; }
+
+        /* --- Compétences --- */
+        .skills-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .skill-badge {
+            background-color: var(--white);
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 8.5pt;
+            color: var(--dark);
+            border: 1px solid var(--border);
+            page-break-inside: avoid;
+        }
+
+        /* --- Langues --- */
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            page-break-inside: avoid;
+        }
+        .language-name { color: var(--dark); }
+        .language-level { color: var(--muted); font-size: 9pt; }
+
+        /* ===================== MAIN CONTENT (COLONNE DROITE) ===================== */
+        .main-content {
+            width: 65%;
+            background-color: var(--white);
+            padding: 25px;
+            color: var(--dark);
+            overflow-y: auto;
+            max-height: 297mm;
+            height: 100%;
+        }
+
+        /* --- En-tête principale --- */
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        .header-subtitle {
+            font-size: 15px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* --- Accroche professionnelle --- */
+        .summary {
+            font-size: 10.5pt;
+            line-height: 1.5;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: var(--bg-sidebar);
+            border-radius: 4px;
+            border-left: 3px solid var(--accent);
+        }
+
+        /* --- Titres de section --- */
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+            color: var(--primary);
+        }
+
+        /* --- Expériences professionnelles --- */
+        .experience-block { 
+            margin-bottom: 16px; 
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .exp-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 4px; 
+            align-items: flex-start;
+        }
+        .exp-role { 
+            font-weight: 600; 
+            font-size: 11pt; 
+            color: var(--dark);
+            flex: 1;
+        }
+        .exp-period { 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        .exp-company { 
+            font-size: 10.5pt; 
+            color: var(--accent); 
+            font-weight: 500; 
+            margin-bottom: 4px; 
+        }
+        .exp-city { 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+            margin-bottom: 6px; 
+        }
+        .mission-item { 
+            position: relative; 
+            padding-left: 12px; 
+            margin-bottom: 4px; 
+            font-size: 9.5pt;
+        }
+        .mission-item::before { 
+            content: '•'; 
+            position: absolute; 
+            left: 0; 
+            color: var(--accent); 
+        }
+
+        /* --- Études --- */
+        .education-block { 
+            margin-bottom: 14px; 
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .edu-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 4px; 
+        }
+        .edu-diploma { 
+            font-weight: 600; 
+            font-size: 10.5pt; 
+            color: var(--dark);
+        }
+        .edu-year { 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+            font-weight: 500; 
+        }
+        .edu-institution { 
+            font-size: 10.5pt; 
+            color: var(--accent); 
+            font-weight: 500; 
+            margin-bottom: 3px; 
+        }
+        .edu-details { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+        }
+        .edu-mention { 
+            color: var(--success); 
+            font-weight: 500; 
+        }
+
+        /* --- Formations & Certifications --- */
+        .formation-block { 
+            margin-bottom: 10px; 
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .formation-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 2px; 
+        }
+        .formation-title { 
+            font-weight: 500; 
+            font-size: 10pt; 
+            color: var(--dark);
+        }
+        .formation-year { 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+        }
+        .formation-org { 
+            font-size: 9.5pt; 
+            color: var(--secondary); 
+        }
+
+        /* --- Publications --- */
+        .publication-block { 
+            margin-bottom: 10px; 
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .pub-header { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 2px; 
+        }
+        .pub-title { 
+            font-weight: 500; 
+            font-size: 10pt; 
+            color: var(--dark);
+        }
+        .pub-year { 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+        }
+        .pub-type { 
+            font-size: 9.5pt; 
+            color: var(--secondary); 
+            font-style: italic; 
+        }
+
+        /* --- Références --- */
+        .reference-block { 
+            margin-bottom: 10px; 
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .ref-name { 
+            font-weight: 600; 
+            font-size: 10pt; 
+            margin-bottom: 2px; 
+            color: var(--dark);
+        }
+        .ref-function { 
+            font-size: 9.5pt; 
+            color: var(--accent); 
+            margin-bottom: 2px; 
+        }
+        .ref-phone { 
+            font-size: 9.5pt; 
+            color: var(--muted); 
+        }
+
+        /* --- Signature --- */
+        .signature {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            text-align: right;
+            font-size: 9.5pt;
+            color: var(--muted);
+        }
+        .signature-place { 
+            font-weight: 500; 
+            margin-bottom: 3px; 
+        }
+        .signature-date { 
+            font-style: italic; 
+        }
+
+        /* --- Gestion des sauts de page --- */
+        @media print {
+            body {
+                overflow: visible;
+                height: auto;
+            }
+            .sidebar, .main-content {
+                overflow: visible;
+                max-height: none;
+                height: auto;
+            }
+            .experience-block,
+            .education-block,
+            .formation-block,
+            .publication-block,
+            .reference-block {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* ===================== UTILITAIRES ===================== */
+        .mt-1 { margin-top: 5px; }
+        .mt-2 { margin-top: 10px; }
+        .mb-1 { margin-bottom: 5px; }
+        .mb-2 { margin-bottom: 10px; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--muted); }
+        .text-primary { color: var(--primary); }
+        .font-bold { font-weight: 700; }
+        .italic { font-style: italic; }
+        .break-avoid { 
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <div class="sidebar">
+        <!-- Photo -->
+        <div class="profile-pic-container">
+            {% if identite.photo_base64 and identite.photo_base64 != "" %}
+                <img src="data:image/jpeg;base64,{{ identite.photo_base64 }}" class="profile-pic">
+            {% else %}
+                <div class="profile-pic"></div>
+            {% endif %}
+        </div>
+
+        <!-- Nom et prénom -->
+        <div class="sidebar-name">{{ identite.prenom }} {{ identite.nom }}</div>
+        {% if identite.post_nom and identite.post_nom != "" %}
+            <div class="sidebar-postnom">{{ identite.post_nom }}</div>
+        {% endif %}
+
+        <!-- Informations personnelles -->
+        <div class="sidebar-title">Informations Personnelles</div>
+        <div class="personal-info">
+            <div class="info-item">
+                <span class="info-label">Genre:</span>
+                <span class="info-value">
+                    {% if identite.sexe == "M" %}Masculin{% else %}Féminin{% endif %}
+                </span>
+            </div>
+            {% if identite.lieu_naissance and identite.lieu_naissance != "" %}
+                <div class="info-item">
+                    <span class="info-label">Naissance:</span>
+                    <span class="info-value">{{ identite.lieu_naissance }}</span>
+                </div>
+            {% endif %}
+            {% if identite.date_naissance and identite.date_naissance != "" %}
+                <div class="info-item">
+                    <span class="info-label">Né(e) le:</span>
+                    <span class="info-value">{{ identite.date_naissance }}</span>
+                </div>
+            {% endif %}
+            {% if identite.etat_civil and identite.etat_civil != "" %}
+                <div class="info-item">
+                    <span class="info-label">État civil:</span>
+                    <span class="info-value">{{ identite.etat_civil }}</span>
+                </div>
+            {% endif %}
+            {% if identite.provenance.nationalite and identite.provenance.nationalite != "" %}
+                <div class="info-item">
+                    <span class="info-label">Nationalité:</span>
+                    <span class="info-value">{{ identite.provenance.nationalite }}</span>
+                </div>
+            {% endif %}
+            {% if identite.provenance.province_origine and identite.provenance.province_origine != "" %}
+                <div class="info-item">
+                    <span class="info-label">Province d'origine:</span>
+                    <span class="info-value">{{ identite.provenance.province_origine }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Contact -->
+        <div class="sidebar-title">Contact</div>
+        {% if identite.contact.telephone_primaire and identite.contact.telephone_primaire != "" %}
+            <div class="contact-item">
+                <span class="contact-label">Téléphone:</span>
+                <span class="contact-value">{{ identite.contact.telephone_primaire }}</span>
+            </div>
+        {% endif %}
+        {% if identite.contact.telephone_secondaire and identite.contact.telephone_secondaire != "" %}
+            <div class="contact-item">
+                <span class="contact-label">Téléphone 2:</span>
+                <span class="contact-value">{{ identite.contact.telephone_secondaire }}</span>
+            </div>
+        {% endif %}
+        {% if identite.contact.email and identite.contact.email != "" %}
+            <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <span class="contact-value">{{ identite.contact.email }}</span>
+            </div>
+        {% endif %}
+        {% if identite.contact.linkedin and identite.contact.linkedin != "" %}
+            <div class="contact-item">
+                <span class="contact-label">LinkedIn:</span>
+                <span class="contact-value">{{ identite.contact.linkedin }}</span>
+            </div>
+        {% endif %}
+        {% if identite.contact.adresse_actuelle and identite.contact.adresse_actuelle != "" %}
+            <div class="contact-item">
+                <span class="contact-label">Adresse:</span>
+                <span class="contact-value">{{ identite.contact.adresse_actuelle }}</span>
+            </div>
+        {% endif %}
+
+        <!-- Documents d'identité -->
+        {% if identite.documents.type_id and identite.documents.type_id != "" %}
+            <div class="sidebar-title mt-2">Document d'identité</div>
+            <div class="contact-item">
+                <span class="contact-label">{{ identite.documents.type_id }}:</span>
+                <span class="contact-value">{{ identite.documents.numero_id }}</span>
+            </div>
+        {% endif %}
+
+        <!-- Compétences techniques -->
+        {% if competences.techniques and competences.techniques|length > 0 %}
+            <div class="sidebar-title">Compétences Techniques</div>
+            <div class="skills-badges">
+                {% for skill in competences.techniques %}
+                    <span class="skill-badge">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Compétences informatiques -->
+        {% if competences.informatiques and competences.informatiques|length > 0 %}
+            <div class="sidebar-title">Compétences Informatiques</div>
+            <div class="skills-badges">
+                {% for skill in competences.informatiques %}
+                    <span class="skill-badge">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Langues -->
+        {% if competences.langues and competences.langues|length > 0 %}
+            <div class="sidebar-title">Langues</div>
+            {% for langue in competences.langues %}
+                <div class="language-item">
+                    <span class="language-name">{{ langue.langue }}</span>
+                    <span class="language-level">{{ langue.niveau }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Centres d'intérêt -->
+        {% if centres_interet and centres_interet|length > 0 %}
+            <div class="sidebar-title">Centres d'Intérêt</div>
+            <div class="skills-badges">
+                {% for interet in centres_interet %}
+                    <span class="skill-badge">{{ interet }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Qualités humaines -->
+        {% if qualites_humaines and qualites_humaines|length > 0 %}
+            <div class="sidebar-title">Qualités Humaines</div>
+            <div class="skills-badges">
+                {% for qualite in qualites_humaines %}
+                    <span class="skill-badge">{{ qualite }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <div class="main-content">
+        <!-- Titre principal -->
+        <div class="header-title">{{ identite.prenom }} {{ identite.nom }}</div>
+        <div class="header-subtitle">
+            {% if accroche %}
+                {{ accroche|truncate(60) }}
+            {% else %}
+                Professionnel Expérimenté
+            {% endif %}
+        </div>
+
+        <!-- Accroche professionnelle -->
+        {% if accroche and accroche != "" %}
+            <div class="summary">{{ accroche }}</div>
+        {% endif %}
+
+        <!-- Expériences professionnelles -->
+        {% if experiences_pro and experiences_pro|length > 0 %}
+            <div class="section-title">Expériences Professionnelles</div>
+            {% for exp in experiences_pro %}
+                <div class="experience-block break-avoid">
+                    <div class="exp-header">
+                        <div class="exp-role">{{ exp.poste }}</div>
+                        <div class="exp-period">{{ exp.periode }}</div>
+                    </div>
+                    <div class="exp-company">{{ exp.entreprise }}</div>
+                    {% if exp.ville and exp.ville != "" %}
+                        <div class="exp-city">{{ exp.ville }}</div>
+                    {% endif %}
+                    {% if exp.missions and exp.missions|length > 0 %}
+                        <div class="exp-missions">
+                            {% for mission in exp.missions %}
+                                <div class="mission-item">{{ mission }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Formation académique -->
+        {% if etudes and etudes|length > 0 %}
+            <div class="section-title">Formation Académique</div>
+            {% for etude in etudes %}
+                <div class="education-block break-avoid">
+                    <div class="edu-header">
+                        <div class="edu-diploma">{{ etude.diplome }}</div>
+                        <div class="edu-year">{{ etude.annee }}</div>
+                    </div>
+                    <div class="edu-institution">{{ etude.institution }}</div>
+                    <div class="edu-details">
+                        <span class="edu-city">{{ etude.ville }}</span>
+                        {% if etude.mention and etude.mention != "" %}
+                            <span class="edu-mention">{{ etude.mention }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Formations & Certifications -->
+        {% if formations_certifications and formations_certifications|length > 0 %}
+            <div class="section-title">Formations & Certifications</div>
+            {% for formation in formations_certifications %}
+                <div class="formation-block break-avoid">
+                    <div class="formation-header">
+                        <div class="formation-title">{{ formation.titre }}</div>
+                        <div class="formation-year">{{ formation.annee }}</div>
+                    </div>
+                    <div class="formation-org">{{ formation.organisme }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Publications & Travaux -->
+        {% if publications_travaux and publications_travaux|length > 0 %}
+            <div class="section-title">Publications & Travaux</div>
+            {% for publication in publications_travaux %}
+                <div class="publication-block break-avoid">
+                    <div class="pub-header">
+                        <div class="pub-title">{{ publication.titre }}</div>
+                        <div class="pub-year">{{ publication.annee }}</div>
+                    </div>
+                    <div class="pub-type">{{ publication.type }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Personnes de référence -->
+        {% if personnes_reference and personnes_reference|length > 0 %}
+            <div class="section-title">Personnes de Référence</div>
+            {% for reference in personnes_reference %}
+                <div class="reference-block break-avoid">
+                    <div class="ref-name">{{ reference.nom }}</div>
+                    <div class="ref-function">{{ reference.fonction }}</div>
+                    <div class="ref-phone">{{ reference.telephone }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Signature -->
+        {% if signature.lieu or signature.date %}
+            <div class="signature">
+                {% if signature.lieu and signature.lieu != "" %}
+                    <div class="signature-place">Fait à {{ signature.lieu }}</div>
+                {% endif %}
+                {% if signature.date and signature.date != "" %}
+                    <div class="signature-date">Le {{ signature.date }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

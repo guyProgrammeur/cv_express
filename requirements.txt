@@ -5,3 +5,9 @@ weasyprint
 pydantic
 requests
 python-multipart
+Flask
+Flask-Cors
+Flask-Limiter
+itsdangerous
+gunicorn
+waitress
