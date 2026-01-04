@@ -11,3 +11,4 @@ Flask-Limiter
 itsdangerous
 gunicorn
 waitress
+python-dotenv

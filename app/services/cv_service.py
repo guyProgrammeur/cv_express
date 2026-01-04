@@ -33,7 +33,7 @@ def generate_cvs(data):
         documents.append({
             "id": tpl_id,
             "name": name,
-            "download_url": f"/download?token={generate_token(filename, data['transaction_id'])}"
+            "download_url": f"/api/download?token={generate_token(filename, data['transaction_id'])}"
         })
 
     return {"success": True, "documents": documents}

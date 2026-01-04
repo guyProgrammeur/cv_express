@@ -2,10 +2,15 @@ from flask import Blueprint, request, send_file, jsonify, current_app
 from itsdangerous import BadSignature, SignatureExpired
 from ..services.token_service import verify_token
 from ..utils.file_utils import safe_path
+from flask_cors import cross_origin
+
 
 download_bp = Blueprint("download", __name__)
 
+
+
 @download_bp.route("/download")
+@cross_origin(origins=["https://lecyberenligne.pages.dev"])
 def download():
     token = request.args.get("token")
     if not token:
